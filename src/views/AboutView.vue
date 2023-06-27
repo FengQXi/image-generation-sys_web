@@ -4,6 +4,7 @@
     <v-btn>
       Button
     </v-btn>
+    <SvgIcon icon-class="eye-open"></SvgIcon>
   </div>
 </template>
 

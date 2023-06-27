@@ -2,7 +2,9 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import vuetify from 'vite-plugin-vuetify'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,14 +12,20 @@ export default defineConfig({
     vue(),
     vuetify({
       autoImport: true, //按需引入组件
-      styles: {
+      styles: { //全局scss变量
         configFile: 'src/styles/settings.scss'
       }
-    }), // Enabled by default
+    }),
+    createSvgIconsPlugin({
+      // 指定要缓存的图标文件夹
+      iconDirs: [path.resolve(process.cwd(), 'src/icons/svg')],
+      // 执行icon name的格式
+      symbolId: 'icon-[name]'
+    })
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+    },
   }
 })
