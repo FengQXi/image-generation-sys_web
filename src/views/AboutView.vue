@@ -5,6 +5,7 @@
       Button
     </v-btn>
     <SvgIcon icon-class="eye-open"></SvgIcon>
+    <SvgIcon icon-class="community"></SvgIcon>
   </div>
 </template>
 

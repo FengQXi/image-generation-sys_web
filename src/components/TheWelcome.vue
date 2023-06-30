@@ -10,7 +10,7 @@ import SupportIcon from './icons/IconSupport.vue'
 <template>
   <WelcomeItem>
     <template #icon>
-      <DocumentationIcon />
+      <SvgIcon class="community" icon-class="documentation"></SvgIcon>
     </template>
     <template #heading>Documentation</template>
 
@@ -57,7 +57,7 @@ import SupportIcon from './icons/IconSupport.vue'
 
   <WelcomeItem>
     <template #icon>
-      <CommunityIcon />
+      <SvgIcon class="community" icon-class="community"></SvgIcon>
     </template>
     <template #heading>Community</template>
 
@@ -84,3 +84,9 @@ import SupportIcon from './icons/IconSupport.vue'
     <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
   </WelcomeItem>
 </template>
+
+<style scoped>
+.community {
+  font-size: 20px;
+}
+</style>
