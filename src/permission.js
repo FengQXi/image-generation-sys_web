@@ -4,12 +4,17 @@ import 'nprogress/nprogress.css'
 import getPageTitle from './utils/getPageTitle'
 import { getToken } from '@/utils/auth' // get token from cookie
 import { useUserStore } from '@/stores/user'
+import { useCounterStore } from './stores/counter'
 
 const whiteList = ['/login'] // no redirect whitelist
 
 nProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 router.beforeEach(async (to, from, next) => {
+    
+    const user = useUserStore()
+    const counter = useCounterStore()
+
     nProgress.start()
 
     document.title = getPageTitle(to.meta.title)
@@ -24,13 +29,13 @@ router.beforeEach(async (to, from, next) => {
             NProgress.done()
         } else {
             
-            const user = useUserStore()
             if (user.name) {
                 next()
             } else {
                 try {
                     // get user info
                     await user.getUserInfo()
+                    counter.increment()
 
                     next({ ...to }) // 解决不在首页退出登录后登下一个账号白页问题
                 } catch (error) {

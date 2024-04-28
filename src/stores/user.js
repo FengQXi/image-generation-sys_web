@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth.js'
 import { getUserInfo } from '@/api/user'
 
@@ -78,3 +78,7 @@ export const useUserStore = defineStore({
         }
     },
 })
+
+if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));
+}
