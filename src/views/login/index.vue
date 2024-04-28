@@ -61,9 +61,9 @@ async function handleLogin() {
 
         console.log(res);
         if(res.code === 200) {
-            const { token, id } = res.data
+            const { token, userId } = res.data
             user.setAuthorization({
-                id: id,
+                id: userId,
                 token: token,
             })
             handleSnackBarOpen({

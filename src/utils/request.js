@@ -4,9 +4,9 @@ import { useUserStore } from '@/stores/user'
 
 // create an axios instance
 const service = axios.create({
-    baseURL: "http://localhost:8080", // url = base url + request url
+    baseURL: "/dev-api", // url = base url + request url
     // withCredentials: true, // send cookies when cross-domain requests
-    timeout: 5000 // request timeout
+    timeout: 10000 // request timeout
 })
 
 // request interceptor
