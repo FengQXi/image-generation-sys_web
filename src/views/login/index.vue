@@ -18,8 +18,29 @@
                 <v-btn prepend-icon="$vuetify" variant="tonal" @click="handleLogin">
                     Login
                 </v-btn>
-                <v-btn prepend-icon="$vuetify" variant="tonal" @click="handleGoRegister">
+                <!-- <v-btn prepend-icon="$vuetify" variant="tonal" @click="handleGoRegister">
                     Go Register
+                </v-btn> -->
+            </v-container>
+        </v-form>
+
+        <v-form v-model="valid">
+            <v-container>
+                <v-text-field
+                    v-model="userName"
+                    label="First name"
+                    hide-details
+                    required
+                ></v-text-field>
+                <v-text-field
+                    v-model="userPassword"
+                    label="Last name"
+                    hide-details
+                    required
+                ></v-text-field>
+
+                <v-btn prepend-icon="$vuetify" variant="tonal" @click="handleRegister">
+                    Register
                 </v-btn>
             </v-container>
         </v-form>
@@ -35,8 +56,8 @@
     </v-snackbar>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { reactive, ref, watch } from 'vue'
+import { useUserStore } from '@/stores/modules/user'
 import { useRouter, useRoute } from 'vue-router'
 import { register, login } from '@/api/user';
 
@@ -105,6 +126,10 @@ async function handleRegister() {
         })
         if (res.code === 200) {
             // 去登录
+            handleSnackBarOpen({
+                color: 'success',
+                text: res.message
+            })
         }
         else {
             handleSnackBarOpen({
@@ -117,9 +142,9 @@ async function handleRegister() {
     }
 }
 
-function handleGoRegister() {
-    router.push('/register')
-}
+// function handleGoRegister() {
+//     router.push('/register')
+// }
 
 function handleSnackBarOpen(data) {
     const { color, text } = data

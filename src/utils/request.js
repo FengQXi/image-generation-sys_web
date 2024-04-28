@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/modules/user'
 
 // create an axios instance
 const service = axios.create({

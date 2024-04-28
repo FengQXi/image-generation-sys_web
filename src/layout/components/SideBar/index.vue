@@ -68,7 +68,7 @@
             </div>
             <div class="bottom-content">
                 <li>
-                    <a href="#">
+                    <a href="#" @click="handleLogout">
                         <i class="bx bx-log-out icon"></i>
                         <span class="text nav-text">Logout</span>
                     </a>
@@ -88,41 +88,41 @@
     </nav>
 </template>
 <script>
+import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/modules/user'
+
 export default {
     name: 'SideBar',
-    data() {
+    setup() {
+        const user = useUserStore()
+        const router = useRouter()
+        const route = useRoute()
+        
+        const isOpen = ref(false)
+        const isNightMode = ref(true)
+        
+        function handleToggle() {
+            isOpen.value = !isOpen.value
+        }
+
+        function handleChangeMode() {
+            isNightMode.value = !isNightMode.value
+        }
+
+        function handleLogout() {
+            user.restAuthorization()
+            router.push(`/login?redirect=${route.fullPath}`)
+        }
+
         return {
-            isOpen: false,
-            isNightMode: true,
+            isOpen,
+            isNightMode,
+            handleToggle,
+            handleChangeMode,
+            handleLogout,
         }
     },
-    computed: {
-        routes() {
-            // 遍历user store中的finalRoutes
-            return this.$router.options.routes
-            // return this.$router.options.routes
-        },
-        activeMenu() {
-            const route = this.$route
-            const { meta, path } = route
-            // if set path, the sidebar will highlight the path you set
-            if (meta.activeMenu) {
-                return meta.activeMenu
-            }
-            return path
-        },
-    },
-    methods: {
-        handleToggle() {
-            this.isOpen = !this.isOpen
-        },
-        handleChangeMode() {
-            this.isNightMode = !this.isNightMode
-        }
-    },
-    mounted() {
-        console.log(this.routes);
-    }
 }
 </script>
 <style lang="scss">

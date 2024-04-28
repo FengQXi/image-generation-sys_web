@@ -3,7 +3,7 @@ import nProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import getPageTitle from './utils/getPageTitle'
 import { getToken } from '@/utils/auth' // get token from cookie
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/modules/user'
 
 const whiteList = ['/login'] // no redirect whitelist
 
