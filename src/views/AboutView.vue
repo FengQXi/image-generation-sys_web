@@ -9,6 +9,13 @@
   </div>
 </template>
 
+<script>
+export default {
+    name: 'About',
+    
+}
+</script>
+
 <style>
 @media (min-width: 1024px) {
   .about {

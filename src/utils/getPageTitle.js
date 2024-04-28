@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 
-const title = defaultSettings.title || 'FengQX-BLOG'
+const title = defaultSettings.title || 'ImageG'
 
 export default function getPageTitle(pageTitle) {
   if (pageTitle) {

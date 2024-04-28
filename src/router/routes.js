@@ -1,3 +1,6 @@
+/* Layout */
+import Layout from '@/layout/index.vue'
+
 export const constantRoutes = [
     {
         path: '/404',
@@ -5,10 +8,9 @@ export const constantRoutes = [
         hidden: true
     },
     {
-        path: '/',
-        name: 'home',
-        component: () => import('../views/HomeView.vue'),
-        meta: { title: '首页' }
+        path: '/login',
+        component: () => import('@/views/login/index.vue'),
+        hidden: true,
     },
     {
         path: '/about',
@@ -18,6 +20,23 @@ export const constantRoutes = [
         // which is lazy-loaded when the route is visited.
         component: () => import('../views/AboutView.vue'),
         meta: { title: '关于' }
+    },
+    {
+        path: '/test',
+        name: 'test',
+        component: () => import('../views/TestView2.vue'),
+        meta: { title: '测试' }
+    },
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/dashboard',
+        children: [{
+            path: 'dashboard',
+            name: 'Dashboard',
+            component: () => import('../views/AboutView.vue'),
+            meta: { title: '首页', icon: 'dashboard' }
+        }],
     },
 
     // 404 page must be placed at the end !!!

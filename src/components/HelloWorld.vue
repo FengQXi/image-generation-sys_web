@@ -1,4 +1,7 @@
 <script setup>
+import { focus } from 'vue3-easy-directives';
+const vFocus = focus
+
 defineProps({
   msg: {
     type: String,
@@ -15,6 +18,7 @@ defineProps({
       <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3>
+    <input type="text" v-focus>
   </div>
 </template>
 
