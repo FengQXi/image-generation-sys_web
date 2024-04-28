@@ -38,6 +38,9 @@ export const useUserStore = defineStore({
                     return Promise.reject(error)
                 }
             }
+            else {
+                return Promise.reject('未登录')
+            }
         },
 
         restUserInfo() {
@@ -46,6 +49,7 @@ export const useUserStore = defineStore({
                 avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
                 routes: [], // 服务器返回的菜单信息
                 finalRoutes: [], // 通过用户信息，计算出来的异步路由
+                token: '',
             })
         },
 
@@ -66,6 +70,11 @@ export const useUserStore = defineStore({
             this.$patch({
                 token: token,
             })
+        },
+
+        restAuthorization() {
+            removeToken()
+            this.restUserInfo()
         }
     },
 })

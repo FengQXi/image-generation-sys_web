@@ -45,15 +45,11 @@ service.interceptors.response.use(
 
         // if the custom code is not 200, it is judged as an error.
         if (res.code !== 200) {
-            //   Message({
-            //     message: res.message || 'Error',
-            //     type: 'error',
-            //     duration: 5 * 1000
-            //   })
 
             // Token expired;
             if (res.code === 401) {
-
+                const user = useUserStore()
+                user.restAuthorization()
                 console.log('out');
             }
             return Promise.reject(new Error(res.message || 'Error'))

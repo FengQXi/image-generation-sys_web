@@ -35,7 +35,7 @@ router.beforeEach(async (to, from, next) => {
                     next({ ...to }) // 解决不在首页退出登录后登下一个账号白页问题
                 } catch (error) {
                     // remove token and go to login page to re-login
-                    await user.restUserInfo()
+                    await user.restAuthorization()
                     // 这里要调用组件提示
                     // Message.error(error || 'Has Error')
                     next(`/login?redirect=${to.path}`)

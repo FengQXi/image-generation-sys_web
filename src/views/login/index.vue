@@ -79,7 +79,10 @@ async function handleLogin() {
             })
         }
     } catch (error) {
-        console.log(error)
+        handleSnackBarOpen({
+            color: 'error',
+            text: error
+        })
     }
 }
 
@@ -99,7 +102,7 @@ async function handleRegister() {
             })
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 
