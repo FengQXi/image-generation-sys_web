@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // create an axios instance
 const service = axios.create({
-    baseURL: "https://aip.baidubce.com", // url = base url + request url
+    baseURL: "dev-qf-api", // url = base url + request url
     // withCredentials: true, // send cookies when cross-domain requests
     timeout: 45000, // request timeout
 })

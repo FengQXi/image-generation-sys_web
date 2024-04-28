@@ -9,14 +9,21 @@
             :src="item.b64_image"
         ></v-img>
 
-        <v-text-field
-            v-model="inputedPrompt"
-            label="Prompt"
-            outlined
-            clearable
-            @keyup.enter="handleGenerate"
-            @click="handleGenerate"
-        ></v-text-field>
+        <v-container>
+            <v-text-field
+                v-model="inputedPrompt"
+                label="Prompt"
+                outlined
+                clearable
+                @keyup.enter="handleGenerate"
+            ></v-text-field>
+
+            <v-btn
+                :loading="loading"
+                :disabled="loading"
+                @click="handleGenerate"
+            >Generate</v-btn>
+        </v-container>
     </div>
 
     <v-snackbar
