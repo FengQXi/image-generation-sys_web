@@ -6,7 +6,7 @@
             :width="291"
             aspect-ratio="16/9"
             cover
-            :src="item.b64_image"
+            :src="'data:image/png;base64,' + item.b64_image"
         ></v-img>
 
         <v-container>
@@ -94,6 +94,7 @@ export default {
             snackBarInfo,
             snackbarOpen,
             handleSnackBarOpen,
+            loading
         }
     }
 }

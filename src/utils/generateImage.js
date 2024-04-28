@@ -62,8 +62,8 @@ async function requestAccessToken() {
 
     let token = null
 
-    if(res.refresh_token) {
-        token = res.refresh_token
+    if(res.data.refresh_token) {
+        token = res.data.refresh_token
         setAccessToken(token)
     }
 
@@ -90,7 +90,7 @@ function generateImage(prompt) {
             }
         })
 
-        resolve(res)
+        resolve(res.data)
     })
 }
 

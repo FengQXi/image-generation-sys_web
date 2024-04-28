@@ -42,7 +42,7 @@ export const constantRoutes = [
         path: '/image',
         component: Layout,
         children: [{
-            path: 'image',
+            path: '/image',
             name: 'GenerateImage',
             component: () => import('../views/generateImage'),
             meta: { title: '图片生成', icon: 'picture' }
