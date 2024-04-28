@@ -38,6 +38,16 @@ export const constantRoutes = [
             meta: { title: '首页', icon: 'dashboard' }
         }],
     },
+    {
+        path: '/image',
+        component: Layout,
+        children: [{
+            path: 'index',
+            name: 'GenerateImage',
+            component: () => import('../views/generateImage'),
+            meta: { title: '图片生成', icon: 'picture' }
+        }],
+    },
 
     // 404 page must be placed at the end !!!
     // { path: '*', redirect: '/404', hidden: true } // have some questions
