@@ -17,31 +17,6 @@ export const useUserStore = defineStore({
             // remove token
             removeToken()
             this.restUserInfo()
-            // we could do other stuff like redirecting the user
-        },
-
-        /**
-         * Attempt to login a user
-         */
-        async login(userInfo) {
-            const { username, password } = userInfo
-            const userData = await login({ username, password })
-
-            console.log(userData);
-            if(userData.code === 200) {
-                const { token, userInfo } = userData.data
-                setToken(token)
-                // setUserId(userInfo.userId)
-
-                this.$patch({
-                    name: userInfo.username,
-                    token: token,
-                })
-                return Promise.resolve()
-            }
-            else {
-                return Promise.reject(userData.message)
-            }
         },
 
         restUserInfo() {
@@ -50,6 +25,16 @@ export const useUserStore = defineStore({
                 avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
                 routes: [], // 服务器返回的菜单信息
                 finalRoutes: [], // 通过用户信息，计算出来的异步路由
+            })
+        },
+
+        setUserInfo(userInfo) {
+            const { token, username } = userInfo
+            // set token
+            setToken(token)
+            this.$patch({
+                name: username,
+                token: token,
             })
         },
     },
