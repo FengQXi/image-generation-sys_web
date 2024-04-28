@@ -17,7 +17,7 @@ export function register(){
 
 export function getUserInfo(userId){
     return request({
-        url: `/user/permission/${userId}`,
+        url: `/user/permissions/${userId}`,
         method: 'get',
     })
 }

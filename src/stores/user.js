@@ -23,11 +23,11 @@ export const useUserStore = defineStore({
             const id = getUserId()
             if (id) {
                 try {
-                    const { data } = await getUserInfo(id)
-                    if(data.code === 200) {
+                    const { data, code } = await getUserInfo(id)
+                    if(code === 200) {
                         this.$patch({
                             name: data.username,
-                            routes: data.routes,
+                            routes: data.permission,
                         })
                     }
                     else {
