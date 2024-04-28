@@ -77,6 +77,7 @@ export const useUserStore = defineStore({
             this.restUserInfo()
         }
     },
+    persist: true,
 })
 
 if (import.meta.hot) {

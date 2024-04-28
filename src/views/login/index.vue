@@ -37,8 +37,12 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { register, login } from '@/api/user';
+
+const user = useUserStore()
+const router = useRouter()
+const route = useRoute()
 
 const userName = ref('')
 const userPassword = ref('')
@@ -49,18 +53,25 @@ const snackBarInof = reactive({
 })
 const snackbarOpen = ref(false)
 
-const user = useUserStore()
-const router = useRouter()
+const redirect = ref(null)
+
+watch(
+    route,
+    (newValue, oldValue) => {
+        redirect.value = newValue.query && newValue.query.redirect
+    },
+    { immediate: true }
+)
 
 async function handleLogin() {
     try {
         const res = await login({
-             username: userName.value,
-             password: userPassword.value
+            username: userName.value,
+            password: userPassword.value
         })
 
         console.log(res);
-        if(res.code === 200) {
+        if (res.code === 200) {
             const { token, userId } = res.data
             user.setAuthorization({
                 id: userId,
@@ -70,7 +81,7 @@ async function handleLogin() {
                 color: 'success',
                 text: res.message
             })
-            router.push('/')
+            router.push({ path: redirect.value || '/' })
         }
         else {
             handleSnackBarOpen({
