@@ -35,7 +35,7 @@ export default {
     name: "GenerateImage",
     setup(props) {
         const inputedPrompt = ref("")
-        const imageUrls = reactive([])
+        const imageUrls = ref([])
 
         const loading = ref(false)
 
@@ -57,7 +57,7 @@ export default {
                     console.log(res.error_msg);
                 }
                 else {
-                    imageUrls = res.data
+                    imageUrls.value = res.data
                     handleSnackBarOpen({
                         color: 'success',
                         text: '生成成功',
