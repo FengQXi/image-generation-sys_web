@@ -65,6 +65,8 @@ const user = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
+const valid = ref(true)
+
 const userName = ref('')
 const userPassword = ref('')
 
