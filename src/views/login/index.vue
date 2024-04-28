@@ -32,8 +32,16 @@ const userPassword = ref('')
 const user = useUserStore()
 
 async function handleLogin() {
-    console.log('handleLogin');
-    let res = await user.login(userName.value, userPassword.value)
+    try {
+        await user.login({
+            username: userName.value,
+            password: userPassword.value
+        })
+        // 路由跳转
+        this.$router.push('/')
+    } catch (error) {
+        console.log(error)
+    }
 }
 </script>
 <style lang="">
