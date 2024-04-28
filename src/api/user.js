@@ -14,3 +14,11 @@ export function register(){
         data
     })
 }
+
+export function getUserInfo(userId){
+    return request({
+        url: '/user/permission',
+        method: 'get',
+        params: { userId: userId }
+    })
+}

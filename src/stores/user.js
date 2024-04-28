@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth.js'
-import { login } from '@/api/user'
+import { getUserInfo } from '@/api/user'
 
 export const useUserStore = defineStore({
     id: 'user',
@@ -17,6 +17,27 @@ export const useUserStore = defineStore({
             // remove token
             removeToken()
             this.restUserInfo()
+        },
+
+        async getUserInfo() {
+            const id = getUserId()
+            if (id) {
+                try {
+                    const { data } = await getUserInfo(id)
+                    if(data.code === 200) {
+                        this.$patch({
+                            name: data.username,
+                            routes: data.routes,
+                        })
+                    }
+                    else {
+                        return Promise.reject(data.msg)
+                    }
+                } catch (error) {
+                    console.log(error)
+                    return Promise.reject(error)
+                }
+            }
         },
 
         restUserInfo() {
@@ -37,5 +58,14 @@ export const useUserStore = defineStore({
                 token: token,
             })
         },
+
+        setAuthorization(auth) {
+            const { token, id } = auth
+            setToken(token)
+            setUserId(id)
+            this.$patch({
+                token: token,
+            })
+        }
     },
 })
