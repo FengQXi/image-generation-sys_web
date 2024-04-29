@@ -1,13 +1,36 @@
 <template lang="">
-    <div>
-        <v-img
+    <div class="generate-image">
+        <div
+            class="image-item" style="width: 291px; position: relative;" 
             v-for="(item, index) in imageUrls"
-            :key="index"
-            :width="291"
-            aspect-ratio="16/9"
-            cover
-            :src="'data:image/png;base64,' + item.b64_image"
-        ></v-img>
+        >
+            <v-img
+                :key="index"
+                :width="291"
+                aspect-ratio="16/9"
+                cover
+                :src="'data:image/png;base64,' + item.b64_image"
+            ></v-img>
+            <SvgIcon
+                @click="handleFavorite(item)"
+                :icon-class="item.id ? 'eye-open' : 'eye-close'"
+                style="position: absolute; right: 0; top: 0; cursor: pointer;"
+            ></SvgIcon>
+        </div>
+
+        <div class="image-item" style="width: 291px; position: relative;">
+            <v-img
+                class="bg-grey-lighten-2"
+                src="https://picsum.photos/350/165?random"
+                style="position: relative;"
+            >
+            </v-img>
+            <SvgIcon
+                @click="handleFavorite()"
+                icon-class="eye-opene"
+                style="position: absolute; right: 0; top: 0; cursor: pointer;"
+            ></SvgIcon>
+        </div>
 
         <v-container>
             <v-text-field
@@ -37,7 +60,10 @@
 </template>
 <script>
 import { ref, reactive, toRefs, watch, onMounted } from "vue"
-import generateImage from "../../utils/generateImage"
+import generateImage from "@/utils/generateImage"
+import { addFavoriteImage, removeFavoriteImage } from "@/api/image"
+import { getUserId } from '@/utils/auth.js'
+
 export default {
     name: "GenerateImage",
     setup(props) {
@@ -55,6 +81,7 @@ export default {
         async function handleGenerate() {
             const data = {
                 prompt: inputedPrompt.value,
+                n: 2,
             }
             loading.value = true
             try {
@@ -87,6 +114,44 @@ export default {
             snackbarOpen.value = true
         }
 
+        async function handleFavorite(item) {
+            let param, requestMethod
+            // 根据id判断是否已经收藏
+            if(item.id) {
+                param = item.id
+                requestMethod = removeFavoriteImage
+            }
+            else {
+                param = {
+                    userId: getUserId(),
+                    description: inputedPrompt.value,
+                    imageData: item.b64_image,
+                }
+                requestMethod = addFavoriteImage
+            }
+            try {
+                const res = await requestMethod(param)
+                if(res.code === 200) {
+                    handleSnackBarOpen({
+                        color: 'success',
+                        text: item.id ? '取消收藏' : '收藏成功',
+                    })
+                    // 修改item的id，让下次点击能正确判断
+                    if(item.id) {
+                        delete item.id
+                    }
+                    else {
+                        item.id = res.data.id
+                    }
+                }
+            } catch (error) {
+                handleSnackBarOpen({
+                    color: 'error',
+                    text: item.id ? '取消失败' : '收藏失败',
+                })
+            }
+        }
+
         return {
             inputedPrompt,
             imageUrls,
@@ -94,7 +159,8 @@ export default {
             snackBarInfo,
             snackbarOpen,
             handleSnackBarOpen,
-            loading
+            loading,
+            handleFavorite,
         }
     }
 }

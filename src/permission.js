@@ -5,7 +5,7 @@ import getPageTitle from './utils/getPageTitle'
 import { getToken } from '@/utils/auth' // get token from cookie
 import { useUserStore } from '@/stores/modules/user'
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login', '/404', '/image', '/favorite'] // no redirect whitelist
 
 nProgress.configure({ showSpinner: false }) // NProgress Configuration
 

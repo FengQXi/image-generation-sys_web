@@ -48,6 +48,16 @@ export const constantRoutes = [
             meta: { title: '图片生成', icon: 'picture' }
         }],
     },
+    {
+        path: '/favorite',
+        component: Layout,
+        children: [{
+            path: '/favorite',
+            name: 'FavorateList',
+            component: () => import('../views/favorateList'),
+            meta: { title: '我的收藏', icon: 'favorate' }
+        }],
+    },
 
     // 404 page must be placed at the end !!!
     // { path: '*', redirect: '/404', hidden: true } // have some questions
