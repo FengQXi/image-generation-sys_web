@@ -63,6 +63,7 @@ import { ref, reactive, toRefs, watch, onMounted } from "vue"
 import generateImage from "@/utils/generateImage"
 import { addFavoriteImage, removeFavoriteImage } from "@/api/image"
 import { getUserId } from '@/utils/auth.js'
+import { confirmSnackbar, messageSnackbar } from "@/components/CustomerSnackbar"
 
 export default {
     name: "GenerateImage",

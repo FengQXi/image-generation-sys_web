@@ -50,7 +50,7 @@ service.interceptors.response.use(
             if (res.code === 401) {
                 const user = useUserStore()
                 user.restAuthorization()
-                console.log('out');
+                location.reload()
             }
             return Promise.reject(new Error(res.message || 'Error'))
         } else {

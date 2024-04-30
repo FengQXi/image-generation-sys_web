@@ -45,21 +45,13 @@
             </v-container>
         </v-form>
     </div>
-
-    <v-snackbar
-      :timeout="2000"
-      :color="snackBarInof.color"
-      variant="tonal"
-      v-model="snackbarOpen"
-    >
-      {{ snackBarInof.text }}
-    </v-snackbar>
 </template>
 <script setup>
 import { reactive, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/modules/user'
 import { useRouter, useRoute } from 'vue-router'
 import { register, login } from '@/api/user';
+import { messageSnackbar } from '@/components/CustomerSnackbar/index'
 
 const user = useUserStore()
 const router = useRouter()
@@ -70,17 +62,12 @@ const valid = ref(true)
 const userName = ref('')
 const userPassword = ref('')
 
-const snackBarInof = reactive({
-    color: 'success',
-    text: 'This is a success snackbar.',
-})
-const snackbarOpen = ref(false)
-
 const redirect = ref(null)
 
 watch(
     route,
     (newValue, oldValue) => {
+        // 获取重定向地址，方便登录后直接重定向路由
         redirect.value = newValue.query && newValue.query.redirect
     },
     { immediate: true }
@@ -100,22 +87,22 @@ async function handleLogin() {
                 id: userId,
                 token: token,
             })
-            handleSnackBarOpen({
+            messageSnackbar({
                 color: 'success',
-                text: res.message
+                message: res.message
             })
             router.push({ path: redirect.value || '/' })
         }
         else {
-            handleSnackBarOpen({
+            messageSnackbar({
                 color: 'error',
-                text: res.message
+                message: res.message
             })
         }
     } catch (error) {
-        handleSnackBarOpen({
+        messageSnackbar({
             color: 'error',
-            text: error
+            message: error
         })
     }
 }
@@ -147,13 +134,6 @@ async function handleRegister() {
 // function handleGoRegister() {
 //     router.push('/register')
 // }
-
-function handleSnackBarOpen(data) {
-    const { color, text } = data
-    snackBarInof.color = color
-    snackBarInof.text = text
-    snackbarOpen.value = true
-}
 </script>
 <style lang="">
 
