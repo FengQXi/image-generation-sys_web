@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth.js'
 import { getUserInfo } from '@/api/user'
+import { useRoute } from 'vue-router'
 
 export const useUserStore = defineStore({
     id: 'user',
@@ -25,6 +26,7 @@ export const useUserStore = defineStore({
                 try {
                     const { data, code } = await getUserInfo(id)
                     if(code === 200) {
+                        console.log(route, 'route');
                         this.$patch({
                             name: data.username,
                             routes: data.permission,

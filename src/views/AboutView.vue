@@ -4,7 +4,7 @@
     <v-btn>
       Button
     </v-btn>
-    <SvgIcon icon-class="eye-open"></SvgIcon>
+    <SvgIcon icon-class="eye-open" class-name="hahahah"></SvgIcon>
     <SvgIcon icon-class="community"></SvgIcon>
   </div>
 </template>
@@ -17,6 +17,10 @@ export default {
 </script>
 
 <style>
+.hahahah {
+    color: red;
+    font-size: 20px;
+}
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;

@@ -24,6 +24,6 @@ export const confirmSnackbar = (options) => {
 
 export const messageSnackbar = (options) => {
     messageSnackbarInfo.text = options.message
-    messageSnackbarInfo.color = options.color
+    messageSnackbarInfo.color = options.color || 'success'
     messageSnackbarOpen.value = true
 }

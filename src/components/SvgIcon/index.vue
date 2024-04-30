@@ -25,9 +25,9 @@ const iconName = computed(() => {
 })
 const svgClass = computed(() => {
     if(props.className) {
-        return 'svg-icon' + props.className
+        return 'svg-icon ' + props.className
     } else {
-        return 'svg-icon'
+        return 'svg-icon '
     }
 })
 const isUrlExternal = computed(() => {

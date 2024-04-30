@@ -3,10 +3,10 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="@/assets/image.png" alt="">
+                    <img :src="user.avatar" alt="">
                 </span>
                 <div class="text logo-text">
-                    <span class="name">Phoenix</span>
+                    <span class="name">{{ user.name }}</span>
                     <span class="profession">Web Developer</span>
                 </div>
             </div>
@@ -22,54 +22,27 @@
 
                 <ul class="menu-links">
 
-                    <li class="nav-link">
+                    <!-- <li class="nav-link">
                         <a href="#">
                             <i class="bx bx-home-alt icon"></i>
                             <span class="text nav-text">Dashboard</span>
                         </a>
-                    </li>
-
-                    <!-- 下面的小li都是一样的样式，只需要修改文字和图标 -->
-                    <!-- <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-bar-chart-alt-2 icon'></i>
-                            <span class="text nav-text">Revenue</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-bell icon'></i>
-                            <span class="text nav-text">Notifications</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-pie-chart-alt icon'></i>
-                            <span class="text nav-text">Analytics</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-heart icon'></i>
-                            <span class="text nav-text">Likes</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-wallet icon'></i>
-                            <span class="text nav-text">Wallets</span>
-                        </a>
                     </li> -->
+                    <li class="nav-link" v-for="(item, index) in finalRoutes">
+                        <router-link :to="item.children[0].path">
+                            <a href="#" :class="{active: item.children[0].path === activeMenu}">
+                                <svg-icon :icon-class="item.children[0].meta.icon" class-name="icon"/>
+                                <span class="text nav-text">{{ item.children[0].meta.title }}</span>
+                            </a>
+                        </router-link>
+                    </li>
                 </ul>
             </div>
             <div class="bottom-content">
                 <li>
                     <a href="#" @click="handleLogout">
-                        <i class="bx bx-log-out icon"></i>
+                        <!-- <i class="bx bx-log-out icon"></i> -->
+                        <svg-icon icon-class="sign-out" class-name="icon" style="font-weight: 600;"/>
                         <span class="text nav-text">Logout</span>
                     </a>
                 </li>
@@ -88,9 +61,10 @@
     </nav>
 </template>
 <script>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user'
+import { confirmSnackbar, messageSnackbar } from '@/components/CustomerSnackbar'
 
 export default {
     name: 'SideBar',
@@ -101,6 +75,20 @@ export default {
         
         const isOpen = ref(false)
         const isNightMode = ref(true)
+
+        const finalRoutes = computed(() => {
+            // 过滤掉不用出现在菜单的路由
+            return router.options.routes.filter(item => !item.hidden)
+        })
+
+        const activeMenu = computed(() => {
+            const { meta, path } = route
+            // if set path, the sidebar will highlight the path you set
+            if (meta.activeMenu) {
+                return meta.activeMenu
+            }
+            return path
+        })
         
         function handleToggle() {
             isOpen.value = !isOpen.value
@@ -111,8 +99,13 @@ export default {
         }
 
         function handleLogout() {
-            user.restAuthorization()
-            router.push(`/login?redirect=${route.fullPath}`)
+            confirmSnackbar({
+                message: "确定退出嘛？"
+            }).then(() => {
+                messageSnackbar({ message: "退出成功!" })
+                user.restAuthorization()
+                router.push(`/login?redirect=${route.fullPath}`)
+            })
         }
 
         return {
@@ -121,12 +114,19 @@ export default {
             handleToggle,
             handleChangeMode,
             handleLogout,
+            user,
+            router,
+            finalRoutes,
+            activeMenu,
         }
     },
+    mounted() {
+        console.log(this.finalRoutes, 'router')
+    }
 }
 </script>
 <style lang="scss">
-    * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -138,7 +138,8 @@ export default {
     /* 颜色 */
     --body-color: #e4e9f7;
     --sidebar-color: #fff;
-    --primary-color: #695cfe;
+    --sidebar-active-color: #a5cae5;
+    --primary-color: #9c96e6;
     --primary-color-light: #f6f5ff;
     --toggle-color: #ddd;
     --text-color: #707070;
@@ -168,6 +169,13 @@ body.dark{
     --text-color:#ccc;
 }
 
+.sidebar.close{
+    width: 88px;
+    .text{
+        opacity: 0;
+    }
+}
+
 /* sidebar上的初始化样式 */
 .sidebar{
     position: absolute;
@@ -179,50 +187,36 @@ body.dark{
     background: var(--sidebar-color);
     transition: var(--tran-03);
     z-index: 100;
-}
-
-.sidebar.close{
-    width: 88px;
-}
-
-.sidebar li{
-    height: 50px;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.sidebar header .image,.sidebar .icon{
-    min-width: 60px;
-    border-radius: 6px;
-}
-
-.sidebar .icon{
-    min-width: 60px;
-    border-radius: 6px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-}
-
-.sidebar .text,.sidebar .icon{
-    color: var(--text-color);
-    transition: var(--tran-03);
-}
-
-.sidebar .text{
-    font-size: 17px;
-    font-weight: 500;
-    white-space: nowrap;
-    opacity: 1;
-}
-
-.sidebar.close .text{
-    opacity: 0;
-    
+    li{
+        height: 50px;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .image{
+        min-width: 60px;
+        border-radius: 6px;
+    }
+    .icon{
+        min-width: 60px;
+        border-radius: 6px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+    .text{
+        font-size: 17px;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 1;
+    }
+    .text, .icon{
+        color: var(--text-color);
+        transition: var(--tran-03);
+    }
 }
 
 /* header部分样式 */
@@ -316,15 +310,18 @@ body.dark .sidebar header .toggle{
     background-color: transparent;
     display: flex;
     align-items: center;
-height: 100%;
-width: 100%;
-border-radius: 6px;
-text-decoration: none;
-transition: var(--tran-03);
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: var(--tran-03);
 }
 
 .sidebar li a:hover{
     background-color: var(--primary-color);
+}
+.sidebar li .active {
+    background-color: var(--sidebar-active-color);
 }
 .sidebar li a:hover .icon,.sidebar li a:hover .text{
     color: var(--sidebar-color);
@@ -409,30 +406,30 @@ body.dark .switch::before{
     left: 20px;
 }
 
-// .home{
-//     position: absolute;
-//     top: 0;
-//     left: 250px;
-//     height: 100vh;
-//     width: calc(100% - 250px);
-//     background-color: var(--body-color);
-//     transition: var(--tran-03);
-// }
+.home{
+    position: absolute;
+    top: 0;
+    left: 250px;
+    height: 100vh;
+    width: calc(100% - 250px);
+    background-color: var(--body-color);
+    transition: var(--tran-03);
+}
 
-// .home .text{
-//     font-size: 30px;
-//     font-weight: 500;
-//     color: var(--text-color);
-//     padding: 12px 60px;
-// }
+.home .text{
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--text-color);
+    padding: 12px 60px;
+}
 
-// .sidebar.close~.home{
-//     left: 78px;
-//     height: 100vh;
-//     width: calc(100% - 78px);
-// }
+.sidebar.close~.home{
+    left: 78px;
+    height: 100vh;
+    width: calc(100% - 78px);
+}
 
-// body.dark .home .text{
-//     color: var(--text-color);
-// }
+body.dark .home .text{
+    color: var(--text-color);
+}
 </style>

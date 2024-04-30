@@ -2,7 +2,9 @@
     <section class="app-main">
         <router-view v-slot="{ Component }">
             <transition>
-                <component :is="Component" />
+                <div>
+                    <component :is="Component" />
+                </div>
             </transition>
         </router-view>
     </section>
