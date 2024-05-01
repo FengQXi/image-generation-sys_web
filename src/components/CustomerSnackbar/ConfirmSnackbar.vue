@@ -13,13 +13,13 @@
                 color="warning"
                 @click="handleCancelSnackbar"
             >
-                取消
+                <svg-icon icon-class="cancel" />
             </v-btn>
             <v-btn
                 color="success"
                 @click="handleConfirmSnackbar"
             >
-                确定
+                <svg-icon icon-class="confirm" />
             </v-btn>
         </template>
     </v-snackbar>

@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^5.32.1",
     "axios": "^1.6.8",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",

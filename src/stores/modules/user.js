@@ -26,7 +26,6 @@ export const useUserStore = defineStore({
                 try {
                     const { data, code } = await getUserInfo(id)
                     if(code === 200) {
-                        console.log(route, 'route');
                         this.$patch({
                             name: data.username,
                             routes: data.permission,

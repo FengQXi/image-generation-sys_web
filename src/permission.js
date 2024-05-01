@@ -4,6 +4,7 @@ import 'nprogress/nprogress.css'
 import getPageTitle from './utils/getPageTitle'
 import { getToken } from '@/utils/auth' // get token from cookie
 import { useUserStore } from '@/stores/modules/user'
+import { messageSnackbar } from '@/components/CustomerSnackbar/index'
 
 const whiteList = ['/login', '/404'] // no redirect whitelist
 
@@ -40,6 +41,8 @@ router.beforeEach(async (to, from, next) => {
                     await user.restAuthorization()
                     // 这里要调用组件提示
                     // Message.error(error || 'Has Error')
+                    messageSnackbar({ message: error, color: 'error' })
+                    console.log(error);
                     next(`/login?redirect=${to.path}`)
                     NProgress.done()
                 }

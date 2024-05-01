@@ -80,7 +80,6 @@ async function handleLogin() {
             password: userPassword.value
         })
 
-        console.log(res);
         if (res.code === 200) {
             const { token, userId } = res.data
             user.setAuthorization({
