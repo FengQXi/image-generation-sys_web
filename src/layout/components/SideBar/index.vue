@@ -187,6 +187,7 @@ body.dark{
     background: var(--sidebar-color);
     transition: var(--tran-03);
     z-index: 100;
+    border-radius: 10px;
     li{
         height: 50px;
         list-style: none;

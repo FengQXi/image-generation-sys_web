@@ -7,7 +7,7 @@ const service = axios.create({
     timeout: 45000, // request timeout
 })
 
-const SAVE_TIME = 24 * 60 * 60 * 1000
+const SAVE_TIME = 3 * 24 * 60 * 60 * 1000
 const YOUR_API_KEY = "LjX9iQz2E3O1D1iuB6MDNmHD"
 const YOUR_SECRET_KEY = "LOAzIpCK5HUue6LdzEBMD8bIES5hfDzx"
 

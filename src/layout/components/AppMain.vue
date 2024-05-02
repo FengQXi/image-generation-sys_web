@@ -2,9 +2,9 @@
     <section class="app-main">
         <router-view v-slot="{ Component }">
             <transition>
-                <div>
+                <keep-alive :include="['GenerateImage']">
                     <component :is="Component" />
-                </div>
+                </keep-alive>
             </transition>
         </router-view>
     </section>
@@ -24,6 +24,7 @@ export default {
     margin: 10px;
     width: 100%;
     height: calc(100vh - 90px);
-    overflow: hidden;
+    overflow: auto;
+    border-radius: 10px;
 }
 </style>

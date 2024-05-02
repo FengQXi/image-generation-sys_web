@@ -12,5 +12,7 @@ export default {
     .navbar-container {
         display: flex;
         align-items: center;
+        background-color: #fff;
+        border-radius: 10px;
     }
 </style>

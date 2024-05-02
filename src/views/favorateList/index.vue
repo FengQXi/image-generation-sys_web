@@ -1,14 +1,12 @@
-<template lang="">
-    <div>
+<template>
+    <div class="image-list">
         <div
             class="image-item"
-            style="width: 291px; position: relative;"
             v-for="(item, index) in imageUrls"
         >
             <v-img
                 :key="index"
-                :width="291"
-                aspect-ratio="16/9"
+                height="300"
                 cover
                 :src="'data:image/png;base64,' + item.imageData"
             ></v-img>
@@ -19,32 +17,17 @@
             ></SvgIcon>
         </div>
     </div>
-
-    
-    <v-snackbar
-        :timeout="2000"
-        :color="snackBarInfo.color"
-        variant="tonal"
-        v-model="snackbarOpen"
-    >
-        {{ snackBarInfo.text }}
-    </v-snackbar>
 </template>
 <script>
 import { ref, reactive } from 'vue'
 import { getFavoriteImagesByUserId, removeFavoriteImage } from '@/api/image'
 import { getUserId } from '@/utils/auth'
+import { messageSnackbar, confirmSnackbar } from '@/components/CustomerSnackbar'
 
 export default {
     name: 'FavorateList',
     setup() {
         const imageUrls = ref([])
-
-        const snackBarInfo = reactive({
-            color: 'success',
-            text: 'This is a success snackbar.',
-        })
-        const snackbarOpen = ref(false)
 
         async function handleFavorite(item) {
             let param, requestMethod
@@ -64,9 +47,9 @@ export default {
             try {
                 const res = await requestMethod(param)
                 if(res.code === 200) {
-                    handleSnackBarOpen({
+                    messageSnackbar({
                         color: 'success',
-                        text: item.id ? '取消收藏' : '收藏成功',
+                        message: item.id ? '取消收藏' : '收藏成功',
                     })
                     // 修改item的id，让下次点击能正确判断
                     if(item.id) {
@@ -77,9 +60,9 @@ export default {
                     }
                 }
             } catch (error) {
-                handleSnackBarOpen({
+                messageSnackbar({
                     color: 'error',
-                    text: item.id ? '取消失败' : '收藏失败',
+                    message: item.id ? '取消失败' : '收藏失败',
                 })
             }
         }
@@ -90,6 +73,10 @@ export default {
                     const res = await getFavoriteImagesByUserId(getUserId())
                     if(res.code === 200) {
                         imageUrls.value = res.data
+                        messageSnackbar({
+                            color: 'success',
+                            message: '获取收藏列表成功',
+                        })
                     }
                 }
             } catch (error) {
@@ -99,18 +86,25 @@ export default {
 
         return {
             handleFavorite,
-            snackbarOpen,
-            snackBarInfo,
             getFavoriteImageList,
             imageUrls,
         }
     },
     mounted() {
-        console.log('FavorateList mounted');
         this.getFavoriteImageList()
     },
 }
 </script>
-<style lang="">
-    
+<style lang="scss">
+.image-list {
+    display: flex;
+    flex-wrap: wrap;
+    .image-item {
+        position: relative;
+        width: 300px;
+        margin: 10px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+}
 </style>
