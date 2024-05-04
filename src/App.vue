@@ -15,14 +15,14 @@
         <RouterView />
     </div>
     <MessageSnackbar />
-    <ConfirmSnackbar />
+    <ConfirmDialog />
 </template>
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import MessageSnackbar from './components/CustomerSnackbar/MessageSnackbar.vue'
-import ConfirmSnackbar from './components/CustomerSnackbar/confirmSnackbar.vue'
+import ConfirmDialog from './components/CustomerSnackbar/ConfirmDialog.vue'
 </script>
 
 <style scoped>

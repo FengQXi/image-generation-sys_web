@@ -5,24 +5,25 @@
             v-for="(item, index) in imageUrls"
         >
             <v-img
+                class="image-img"
                 :key="index"
                 height="300"
                 cover
                 :src="'data:image/png;base64,' + item.imageData"
             ></v-img>
             <SvgIcon
+                class="image-icon"
                 @click="handleFavorite(item)"
-                :icon-class="item.id ? 'eye-open' : 'eye-close'"
-                style="position: absolute; right: 0; top: 0; cursor: pointer;"
+                :icon-class="item.id ? 'favorite-filling' : 'favorite-empty'"
             ></SvgIcon>
         </div>
     </div>
 </template>
 <script>
 import { ref, reactive } from 'vue'
-import { getFavoriteImagesByUserId, removeFavoriteImage } from '@/api/image'
+import { getFavoriteImagesByUserId, removeFavoriteImage, addFavoriteImage } from '@/api/image'
 import { getUserId } from '@/utils/auth'
-import { messageSnackbar, confirmSnackbar } from '@/components/CustomerSnackbar'
+import { messageSnackbar, confirmDialog } from '@/components/CustomerSnackbar'
 
 export default {
     name: 'FavorateList',
@@ -35,12 +36,21 @@ export default {
             if(item.id) {
                 param = item.id
                 requestMethod = removeFavoriteImage
+                
+                try{
+                    await confirmDialog({
+                        text: '确定取消收藏吗？',
+                    })
+                } catch (error) {
+                    return
+                }
             }
             else {
                 param = {
                     userId: getUserId(),
                     description: item.description,
                     imageData: item.imageData,
+                    style: item.style,
                 }
                 requestMethod = addFavoriteImage
             }
@@ -104,7 +114,18 @@ export default {
         width: 300px;
         margin: 10px;
         border-radius: 10px;
-        overflow: hidden;
+        .image-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+        }
+        .image-icon {
+            position: absolute;
+            color: #FFC24C;
+            right: -8px;
+            top: -8px;
+            cursor: pointer;
+        }
     }
 }
 </style>

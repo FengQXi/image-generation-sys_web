@@ -64,7 +64,7 @@
 import { computed, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user'
-import { confirmSnackbar, messageSnackbar } from '@/components/CustomerSnackbar'
+import { messageSnackbar, confirmDialog } from '@/components/CustomerSnackbar'
 
 export default {
     name: 'SideBar',
@@ -99,8 +99,8 @@ export default {
         }
 
         function handleLogout() {
-            confirmSnackbar({
-                message: "确定退出嘛？"
+            confirmDialog({
+                text: "确定退出嘛？"
             }).then(() => {
                 messageSnackbar({ message: "退出成功!" })
                 user.restAuthorization()

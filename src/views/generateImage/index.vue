@@ -10,18 +10,18 @@
                 :style="{ 'width': finalWidth }"
             >
                 <v-img
+                    class="image-img"
                     :key="index"
                     cover
                     :src="'data:image/png;base64,' + item.b64_image"
                 ></v-img>
                 <SvgIcon
                     @click="handleFavorite(item)"
-                    :icon-class="item.id ? 'eye-open' : 'eye-close'"
-                    style="position: absolute; right: 0; top: 0; cursor: pointer;"
+                    :icon-class="item.id ? 'favorite-filling' : 'favorite-empty'"
+                    class="image-icon"
                 ></SvgIcon>
             </div>
         </div>
-        <!-- <img v-for="(item, index) in imageUrls" :src="'data:image/png;base64,' + item.b64_image"/> -->
 
         <v-container class="option-area">
             <div class="input-area">
@@ -88,8 +88,8 @@ import { ref, reactive, toRefs, watch, onMounted, computed } from "vue"
 import generateImage from "@/utils/generateImage"
 import { addFavoriteImage, removeFavoriteImage } from "@/api/image"
 import { getUserId } from '@/utils/auth.js'
-import { confirmSnackbar, messageSnackbar } from "@/components/CustomerSnackbar"
-import { size } from "lodash"
+import { messageSnackbar, confirmDialog } from "@/components/CustomerSnackbar"
+import { mockImage } from "@/utils/mock"
 
 export default {
     name: "GenerateImage",
@@ -150,6 +150,46 @@ export default {
                 title: "3D模型",
                 subtitle: '3D Model',
                 value: "3D Model",
+            },
+            {
+                title: "模拟胶片",
+                subtitle: 'Analog Film',
+                value: "Analog Film",
+            },
+            {
+                title: "动漫",
+                subtitle: 'Anime',
+                value: "Anime",
+            },
+            {
+                title: "电影",
+                subtitle: 'Cinematic',
+                value: "Cinematic",
+            },
+            {
+                title: "漫画",
+                subtitle: 'Comic Book',
+                value: "Comic Book",
+            },
+            {
+                title: "工艺黏土",
+                subtitle: 'Craft Clay',
+                value: "Craft Clay",
+            },
+            {
+                title: "数字艺术",
+                subtitle: 'Digital Art',
+                value: "Digital Art",
+            },
+            {
+                title: "霓虹朋克",
+                subtitle: 'Neonpunk',
+                value: "Neonpunk",
+            },
+            {
+                title: "像素艺术",
+                subtitle: 'Pixel Art',
+                value: "Pixel Art",
             },
         ])
         const countOptions = reactive([1, 2, 3, 4])
@@ -236,6 +276,12 @@ export default {
             }
         }
 
+        onMounted(() => {
+            console.log(mockImage, 'mockImage');
+            imageUrls.value = mockImage
+            showSize.value = '1152x2048'  
+        })
+
         return {
             inputedPrompt,
             imageUrls,
@@ -250,7 +296,7 @@ export default {
             imageSize,
             finalWidth,
         }
-    }
+    },
 }
 </script>
 <style lang="scss">
@@ -261,6 +307,7 @@ export default {
         overflow-y: auto;
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         position: reactive;
         .image-text {
             position: absolute;
@@ -276,11 +323,22 @@ export default {
             }
         }
         .image-item {
-            margin: 5px;
+            margin: 10px;
             border-radius: 5px;
-            overflow: hidden;
             height: 300px;
             position: relative;
+            .image-img {
+                width: 100%;
+                height: 100%;
+                border-radius: 5px;
+            }
+            .image-icon {
+                position: absolute;
+                color: #FFC24C;
+                right: -8px;
+                top: -8px;
+                cursor: pointer;
+            }
         }
     }
     .option-area {
