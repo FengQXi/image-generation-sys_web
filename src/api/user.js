@@ -21,3 +21,10 @@ export function getUserInfo(userId){
         method: 'get',
     })
 }
+
+export function getCountInfo(userId){
+    return request({
+        url: `/user/count/${userId}`,
+        method: 'get',
+    })
+}

@@ -86,7 +86,7 @@
 <script>
 import { ref, reactive, onMounted, computed } from "vue"
 import generateImage from "@/utils/generateImage"
-import { addFavoriteImage, removeFavoriteImage } from "@/api/image"
+import { addFavoriteImage, removeFavoriteImage, updateImageCount } from "@/api/image"
 import { getUserId } from '@/utils/auth.js'
 import { messageSnackbar } from "@/components/CustomerSnackbar"
 import { mockImage } from "@/utils/mock"
@@ -213,6 +213,7 @@ export default {
             try {
                 const res = await generateImage(data)
                 loading.value = false
+                // const res = await updateImageCount(getUserId(), 4)
                 if (res.error_code) {
                     console.log(res.error_msg);
                     messageSnackbar({

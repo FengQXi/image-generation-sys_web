@@ -9,11 +9,27 @@
   </div>
 </template>
 
-<script>
-export default {
-    name: 'About',
-    
+<script setup>
+import {onMounted} from "vue";
+import { getCountInfo } from "@/api/user";
+import {getUserId} from "@/utils/auth";
+
+defineOptions({
+  name: "About"
+})
+
+async function getDashCountInfo() {
+  try {
+    const res = await getCountInfo(getUserId())
+    console.log(res)
+  } catch (err) {
+
+  }
 }
+
+onMounted(() => {
+  getDashCountInfo()
+})
 </script>
 
 <style>

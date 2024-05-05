@@ -35,3 +35,10 @@ export function publishImgToSociety(data) {
     })
 }
 
+export function updateImageCount(userId, count){
+    return request({
+        url: `/image/number/${userId}/${count}`,
+        method: 'put',
+    })
+}
+

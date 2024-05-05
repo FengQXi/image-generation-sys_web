@@ -5,10 +5,16 @@
             <div class="corner corner-tr"></div>
             <div class="corner corner-br"></div>
             <div class="corner corner-bl"></div>
-            <div class="operation-btns">
-                <span>预览</span>
-                <span @click="handlePublish">发布</span>
-                <span @click="handleDownload">下载</span>
+            <div class="pointer-show">
+                <div class="pointer-message">
+                    <span>{{ focusedItem?.style?.split("|")[0] }}</span>
+                    <span>{{ focusedItem?.style?.split("|")[1] }}</span>
+                </div>
+                <div class="pointer-btns">
+                    <span @click="handlePreview">预览</span>
+                    <span @click="handlePublish">发布</span>
+                    <span @click="handleDownload">下载</span>
+                </div>
             </div>
         </div>
         <div
@@ -171,7 +177,18 @@ export default {
             }
             try {
                 const res = await publishImgToSociety(param)
-                console.log(res)
+                if(res.code === 200) {
+                    messageSnackbar({
+                        message: "发布成功",
+                        color: "success",
+                    })
+                }
+                else {
+                    messageSnackbar({
+                        message: res.message || "发布失败",
+                        color: "error"
+                    })
+                }
             } catch (err) {
                 console.log(err)
             }
@@ -190,6 +207,10 @@ export default {
             downloadDialog.value = false
         }
 
+        function handlePreview() {
+
+        }
+
         return {
             handleFavorite,
             getFavoriteImageList,
@@ -197,10 +218,12 @@ export default {
             handlePublish,
             handleDownload,
             handleDownloadConfirm,
+            handlePreview,
             imageUrls,
             pointerRef,
             imageName,
             downloadDialog,
+            focusedItem,
         }
     },
     mounted() {
@@ -283,7 +306,7 @@ export default {
             border-bottom: var(--t) solid #938888;
             border-right: var(--t) solid #938888;
         }
-        .operation-btns {
+        .pointer-show {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -291,13 +314,25 @@ export default {
             display: flex;
             flex-direction: column;
             z-index: 5;
-            span {
-                display: inline-block;
-                margin: 10px;
-                background-color: #2c3e50;
-                border-radius: 5px;
-                pointer-events: auto;
-                cursor: pointer;
+            .pointer-message {
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                span {
+                    background-color: #9C96E6;
+                    color: #ffffff;
+                    border-radius: 10px;
+                }
+            }
+            .pointer-btns {
+                span {
+                    display: inline-block;
+                    margin: 10px;
+                    background-color: #2c3e50;
+                    border-radius: 5px;
+                    pointer-events: auto;
+                    cursor: pointer;
+                }
             }
         }
     }
