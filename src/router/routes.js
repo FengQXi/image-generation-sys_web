@@ -58,6 +58,16 @@ export const constantRoutes = [
             meta: { title: '我的收藏', icon: 'favorate' }
         }],
     },
+    {
+        path: '/society',
+        component: Layout,
+        children: [{
+            path: '/society',
+            name: 'SocietyList',
+            component: () => import('../views/society'),
+            meta: { title: '社区资源', icon: 'society' }
+        }],
+    },
 
     // 404 page must be placed at the end !!!
     // { path: '*', redirect: '/404', hidden: true } // have some questions

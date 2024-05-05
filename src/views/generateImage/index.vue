@@ -1,4 +1,4 @@
-<template lang="">
+<template lang="html">
     <div class="generate-image">
         <div class="image-list">
             <div class="image-text" v-if="!imageUrls.length">
@@ -84,11 +84,11 @@
     </div>
 </template>
 <script>
-import { ref, reactive, toRefs, watch, onMounted, computed } from "vue"
+import { ref, reactive, onMounted, computed } from "vue"
 import generateImage from "@/utils/generateImage"
 import { addFavoriteImage, removeFavoriteImage } from "@/api/image"
 import { getUserId } from '@/utils/auth.js'
-import { messageSnackbar, confirmDialog } from "@/components/CustomerSnackbar"
+import { messageSnackbar } from "@/components/CustomerSnackbar"
 import { mockImage } from "@/utils/mock"
 
 export default {
@@ -277,7 +277,6 @@ export default {
         }
 
         onMounted(() => {
-            console.log(mockImage, 'mockImage');
             imageUrls.value = mockImage
             showSize.value = '1152x2048'  
         })
@@ -308,7 +307,6 @@ export default {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        position: reactive;
         .image-text {
             position: absolute;
             top: 40%;

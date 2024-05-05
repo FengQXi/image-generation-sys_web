@@ -21,3 +21,17 @@ export function getFavoriteImagesByUserId(userId) {
     })
 }
 
+export function getSocietyImg() {
+    return request({
+        url: '/society/all',
+        method: 'get',
+    })
+}
+export function publishImgToSociety(data) {
+    return request({
+        url: '/society/add',
+        method: 'post',
+        data
+    })
+}
+

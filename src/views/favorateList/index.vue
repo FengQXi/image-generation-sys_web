@@ -1,8 +1,20 @@
 <template>
     <div class="image-list">
+        <div class="pointer" ref="pointerRef">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-br"></div>
+            <div class="corner corner-bl"></div>
+            <div class="operation-btns">
+                <span>预览</span>
+                <span @click="handlePublish">发布</span>
+                <span @click="handleDownload">下载</span>
+            </div>
+        </div>
         <div
             class="image-item"
             v-for="(item, index) in imageUrls"
+            @mouseenter="(e) => handleMouseenter(e, item)"
         >
             <v-img
                 class="image-img"
@@ -18,17 +30,68 @@
             ></SvgIcon>
         </div>
     </div>
+    <v-dialog
+        v-model="downloadDialog"
+        max-width="300"
+    >
+      <v-card
+          title="下载"
+      >
+        <v-card-text>
+          <v-row dense>
+            <v-col
+                cols="12"
+            >
+              <v-text-field
+                  v-model="imageName"
+                  placeholder="image"
+                  label="name"
+                  required
+              ></v-text-field>
+            </v-col>
+          </v-row>
+
+          <small class="text-caption text-medium-emphasis">*请输入下载名称</small>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+              text="Close"
+              variant="plain"
+              @click="downloadDialog = false"
+          ></v-btn>
+
+          <v-btn
+              color="primary"
+              text="Save"
+              variant="tonal"
+              @click="handleDownloadConfirm"
+          ></v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>
 <script>
-import { ref, reactive } from 'vue'
-import { getFavoriteImagesByUserId, removeFavoriteImage, addFavoriteImage } from '@/api/image'
+import {onMounted, reactive, ref} from 'vue'
+import { getFavoriteImagesByUserId, removeFavoriteImage, addFavoriteImage, publishImgToSociety } from '@/api/image'
 import { getUserId } from '@/utils/auth'
+import { downloadImage } from "@/utils/downloadImage";
 import { messageSnackbar, confirmDialog } from '@/components/CustomerSnackbar'
+import {tr} from "vuetify/locale";
 
 export default {
     name: 'FavorateList',
     setup() {
         const imageUrls = ref([])
+        const pointerRef = ref(null)
+
+        const focusedItem = ref({})
+        const imageName = ref("")
+        const downloadDialog = ref(false)
 
         async function handleFavorite(item) {
             let param, requestMethod
@@ -94,10 +157,50 @@ export default {
             }
         }
 
+        function handleMouseenter(e, item) {
+            focusedItem.value = item
+            pointerRef.value.style.setProperty('--x', e.target.offsetLeft + 'px')
+            pointerRef.value.style.setProperty('--y', e.target.offsetTop + 'px')
+            pointerRef.value.style.setProperty('--s', e.target.offsetWidth + 'px')
+        }
+
+        async function handlePublish() {
+            const param = {
+                userId: parseInt(getUserId()),
+                imageId: focusedItem.value.id,
+            }
+            try {
+                const res = await publishImgToSociety(param)
+                console.log(res)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        function handleDownload() {
+            downloadDialog.value = true
+            imageName.value = ""
+        }
+
+        function handleDownloadConfirm() {
+            downloadImage({
+                base64: focusedItem.value.imageData,
+                name: imageName.value
+            })
+            downloadDialog.value = false
+        }
+
         return {
             handleFavorite,
             getFavoriteImageList,
+            handleMouseenter,
+            handlePublish,
+            handleDownload,
+            handleDownloadConfirm,
             imageUrls,
+            pointerRef,
+            imageName,
+            downloadDialog,
         }
     },
     mounted() {
@@ -109,10 +212,11 @@ export default {
 .image-list {
     display: flex;
     flex-wrap: wrap;
+    position: relative;
     .image-item {
         position: relative;
         width: 300px;
-        margin: 10px;
+        margin: 25px;
         border-radius: 10px;
         .image-img {
             width: 100%;
@@ -125,6 +229,76 @@ export default {
             right: -8px;
             top: -8px;
             cursor: pointer;
+        }
+    }
+    .pointer {
+        position: absolute;
+        --l: 30px;
+        --g: 15px;
+        --t: 3px;
+        --s: 300px; // 正方形
+        --x: -400px;
+        --y: -400px;
+        width: calc(var(--s) + var(--g) * 2);
+        height: calc(var(--s) + var(--g) * 2);
+        //border: var(--t) solid #938888;
+        left: calc(var(--x) - var(--g));
+        top: calc(var(--y) - var(--g));
+        transition: 0.5s;
+        //--mask: conic-gradient(
+        //        at var(--l) var(--l),
+        //        transparent 75%,
+        //        red 75%
+        //) 0 0
+        ///
+        //calc(100% - var(--l)) calc(100% - var(--l));
+        //-webkit-mask: var(--mask);
+        //mask: var(--mask);
+        .corner {
+            width: var(--l);
+            height: var(--l);
+            position: absolute;
+        }
+        .corner-tl {
+            top: 0;
+            left: 0;
+            border-top: var(--t) solid #938888;
+            border-left: var(--t) solid #938888;
+        }
+        .corner-tr {
+            top: 0;
+            right: 0;
+            border-top: var(--t) solid #938888;
+            border-right: var(--t) solid #938888;
+        }
+        .corner-bl {
+            bottom: 0;
+            left: 0;
+            border-bottom: var(--t) solid #938888;
+            border-left: var(--t) solid #938888;
+        }
+        .corner-br {
+            bottom: 0;
+            right: 0;
+            border-bottom: var(--t) solid #938888;
+            border-right: var(--t) solid #938888;
+        }
+        .operation-btns {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+            span {
+                display: inline-block;
+                margin: 10px;
+                background-color: #2c3e50;
+                border-radius: 5px;
+                pointer-events: auto;
+                cursor: pointer;
+            }
         }
     }
 }
